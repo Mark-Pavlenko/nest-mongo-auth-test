@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ClientSession } from 'mongoose';
-import { UserRepository } from '../../repositories/user.repository';
+import { AuthRepository } from '../../repositories/auth.repository';
 import { CreateUserDto } from './dto/createUser.dto';
 
 @Injectable()
-export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+export class AuthService {
+  constructor(private readonly userRepository: AuthRepository) {}
 
   async registerUser(createUserDto: CreateUserDto, session: ClientSession) {
     return await this.userRepository.registerUser(createUserDto, session);

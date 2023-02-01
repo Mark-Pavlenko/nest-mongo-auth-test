@@ -5,10 +5,10 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { ClientSession, Model } from 'mongoose';
 import { User } from '../entities/user.entity';
-import { CreateUserDto } from '../modules/user/dto/createUser.dto';
+import { CreateUserDto } from '../modules/auth/dto/createUser.dto';
 import { CryptoService } from '../crypto/crypto.service';
 
-export class UserRepository {
+export class AuthRepository {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly cryptoService: CryptoService,
@@ -29,7 +29,6 @@ export class UserRepository {
     try {
       user = await user.save({ session });
     } catch (error) {
-      console.log('error', error);
       throw new InternalServerErrorException(error);
     }
 

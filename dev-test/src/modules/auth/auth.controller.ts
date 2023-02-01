@@ -10,13 +10,13 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { Response } from 'express';
 import { Connection } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
-@Controller('user')
-export class UserController {
+@Controller('auth')
+export class AuthController {
   constructor(
     @InjectConnection() private readonly mongoConnection: Connection,
-    private userService: UserService,
+    private userService: AuthService,
   ) {}
 
   @Post('/register')
