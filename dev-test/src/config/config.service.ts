@@ -20,7 +20,7 @@ export class ConfigService {
     return this.get('PORT');
   }
 
-  //
+
   public async getMongoConfig() {
     return {
       uri:
