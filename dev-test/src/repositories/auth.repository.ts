@@ -42,7 +42,9 @@ export class AuthRepository {
   async getUserByEmail(email: string) {
     let user;
     try {
-      user = await this.userModel.findOne({ email }, 'username').exec();
+      user = await this.userModel
+        .findOne({ email }, ['username', 'password'])
+        .exec();
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

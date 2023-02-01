@@ -5,12 +5,16 @@ import {
   HttpStatus,
   Post,
   Res,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Response } from 'express';
 import { Connection } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
 import { AuthService } from './auth.service';
+import { LocalAuthGuard } from './guards/local.auth.guard';
+// import LocalAuthenticationGuard from "./guards/local-auth.guard";
 
 @Controller('auth')
 export class AuthController {
@@ -39,5 +43,11 @@ export class AuthController {
     } finally {
       await session.endSession();
     }
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
+  login(@Request() req) {
+    return { User: req.user, msg: 'User logged in' };
   }
 }
