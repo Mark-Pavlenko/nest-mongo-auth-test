@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   HttpStatus,
@@ -20,7 +19,7 @@ import { LocalAuthGuard } from './guards/local.auth.guard';
 export class AuthController {
   constructor(
     @InjectConnection() private readonly mongoConnection: Connection,
-    private userService: AuthService,
+    private authService: AuthService,
   ) {}
 
   @Post('/register')
@@ -31,7 +30,7 @@ export class AuthController {
     const session = await this.mongoConnection.startSession();
     session.startTransaction();
     try {
-      const newUser: CreateUserDto = await this.userService.registerUser(
+      const newUser: CreateUserDto = await this.authService.registerUser(
         createUserDto,
         session,
       );

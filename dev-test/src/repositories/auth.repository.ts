@@ -28,7 +28,7 @@ export class AuthRepository {
 
     user = new this.userModel({
       username: createUserDto.username,
-      password: await this.cryptoService.hash(createUserDto.password),
+      password: await this.cryptoService.hashPassword(createUserDto.password),
     });
 
     try {

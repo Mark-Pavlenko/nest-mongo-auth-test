@@ -5,7 +5,7 @@ import { hash, compare } from 'bcrypt';
 export class CryptoService {
   readonly salt: number = 12;
 
-  async hash(input: string): Promise<string> {
+  async hashPassword(input: string): Promise<string> {
     return await hash(input, this.salt);
   }
 
