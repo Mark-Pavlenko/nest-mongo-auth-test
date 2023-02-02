@@ -1,7 +1,8 @@
 import {
   ConflictException,
+  HttpException,
+  HttpStatus,
   InternalServerErrorException,
-  NotAcceptableException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ClientSession, Model } from 'mongoose';
@@ -19,7 +20,10 @@ export class AuthRepository {
     let user = await this.getUserByEmail(createUserDto.username);
 
     if (user) {
-      throw new ConflictException('User already exists');
+      throw new HttpException(
+        'The user with such email is already exists!',
+        HttpStatus.CONFLICT,
+      );
     }
 
     user = new this.userModel({
@@ -42,13 +46,24 @@ export class AuthRepository {
 
   async validateUser(username: string, password: string) {
     const user = await this.getUserByEmail(username);
+
+    if (!user) {
+      throw new HttpException(
+        'The user could not be found!',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     const passwordValid = await this.cryptoService.comparePasswords(
       password,
       user.password,
     );
 
-    if (!user) {
-      throw new NotAcceptableException('The user could not be found!');
+    if (!passwordValid) {
+      throw new HttpException(
+        'Wrong credentials provided',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (user && passwordValid) {
@@ -58,16 +73,14 @@ export class AuthRepository {
     return null;
   }
 
-  async getUserByEmail(email: string) {
-    let user;
-    try {
-      user = await this.userModel
-        .findOne({ email }, ['username', 'password'])
-        .exec();
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
-
-    return user;
+  async getUserByEmail(username: string) {
+    return await this.userModel
+      .findOne(
+        {
+          username,
+        },
+        ['username', 'password'],
+      )
+      .exec();
   }
 }
