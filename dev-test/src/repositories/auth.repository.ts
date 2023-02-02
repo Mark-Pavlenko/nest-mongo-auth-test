@@ -1,6 +1,7 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  NotAcceptableException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ClientSession, Model } from 'mongoose';
@@ -37,6 +38,24 @@ export class AuthRepository {
     }
 
     return user;
+  }
+
+  async validateUser(username: string, password: string) {
+    const user = await this.getUserByEmail(username);
+    const passwordValid = await this.cryptoService.comparePasswords(
+      password,
+      user.password,
+    );
+
+    if (!user) {
+      throw new NotAcceptableException('The user could not be found!');
+    }
+
+    if (user && passwordValid) {
+      return user;
+    }
+
+    return null;
   }
 
   async getUserByEmail(email: string) {

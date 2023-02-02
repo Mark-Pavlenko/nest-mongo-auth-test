@@ -9,7 +9,10 @@ export class CryptoService {
     return await hash(input, this.salt);
   }
 
-  async compareHash(input: string, hashToCompare: string): Promise<boolean> {
-    return await compare(input, hashToCompare);
+  async comparePasswords(
+    rawPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await compare(rawPassword, hashedPassword);
   }
 }
