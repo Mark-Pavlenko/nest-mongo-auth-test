@@ -17,7 +17,7 @@ export class AuthRepository {
   ) {}
 
   async registerUser(createUserDto: CreateUserDto, session: ClientSession) {
-    let user = await this.getUserByEmail(createUserDto.username);
+    let user = await this.getUserByEmail(createUserDto.username.toLowerCase());
 
     if (user) {
       throw new HttpException(
@@ -27,7 +27,7 @@ export class AuthRepository {
     }
 
     user = new this.userModel({
-      username: createUserDto.username,
+      username: createUserDto.username.toLowerCase(),
       password: await this.cryptoService.hashPassword(createUserDto.password),
     });
 
@@ -45,7 +45,7 @@ export class AuthRepository {
   }
 
   async validateUser(username: string, password: string) {
-    const user = await this.getUserByEmail(username);
+    const user = await this.getUserByEmail(username.toLowerCase());
 
     if (!user) {
       throw new HttpException(
