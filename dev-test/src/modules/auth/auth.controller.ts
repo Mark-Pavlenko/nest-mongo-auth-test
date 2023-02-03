@@ -14,8 +14,6 @@ import { Connection } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.auth.guard';
-import { ValidationPipe } from '../../pipes/validation.pipe';
-import { registerUserSchema } from '../../types/registerUser';
 
 @Controller('auth')
 export class AuthController {
@@ -26,8 +24,7 @@ export class AuthController {
 
   @Post('/register')
   async registerUser(
-    @Body(new ValidationPipe(registerUserSchema))
-    createUserDto: CreateUserDto,
+    @Body() createUserDto: CreateUserDto,
     @Res() res: Response,
   ) {
     const session = await this.mongoConnection.startSession();
