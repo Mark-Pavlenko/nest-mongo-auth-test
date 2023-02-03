@@ -20,6 +20,10 @@ export class ConfigService {
     return this.get('PORT');
   }
 
+  public async getSessionSecret(){
+    return this.get('SESSION_SECRET');
+  }
+
   public async getMongoConfig() {
     return {
       uri:
