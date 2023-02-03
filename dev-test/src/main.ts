@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {Logger, ValidationPipe} from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from './config/config.service';
 import * as session from 'express-session';
 import * as passport from 'passport';
-import {HttpExceptionFilter} from "./filters/HttpExceptionFilter";
+import { HttpExceptionFilter } from './filters/HttpExceptionFilter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
