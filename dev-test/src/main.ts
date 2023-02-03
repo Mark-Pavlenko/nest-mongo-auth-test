@@ -7,10 +7,11 @@ import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = new ConfigService();
 
   app.use(
     session({
-      secret: 'keyboard',
+      secret: await config.getSessionSecret(),
       resave: false,
       saveUninitialized: false,
     }),
@@ -19,7 +20,6 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  const config = new ConfigService();
   await app.listen(await config.getPortConfig());
   Logger.log(
     `🚀 Application is running on: http://localhost:${await config.getPortConfig()}`,
